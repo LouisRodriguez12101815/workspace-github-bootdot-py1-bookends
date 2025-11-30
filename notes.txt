@@ -1,0 +1,46 @@
+NOTES: Switching from Hardcoded Absolute Path to sys.argv
+=========================================================
+
+WHAT CHANGED:
+- Removed hardcoded absolute path (e.g., "/home/phoenix/books/frankenstein.txt")
+- Now using sys.argv[1] to accept the book path as a command-line argument
+
+WHY THIS MATTERS:
+
+1. Portability
+   - Hardcoded paths only work on one specific machine
+   - Other developers have different directory structures
+   - Code would fail for anyone else cloning the repo
+
+2. Flexibility
+   - Can analyze ANY book without modifying code:
+     python3 main.py books/frankenstein.txt
+     python3 main.py books/moby_dick.txt
+     python3 main.py /any/path/to/book.txt
+
+3. Boot.dev Testing
+   - Automated tests need to supply their own test files
+   - Hardcoded paths prevent tests from passing
+   - Tests inject different inputs via command-line arguments
+
+4. Professional Standard Practice
+   - CLI tools accept input via arguments, not hardcoded values
+   - Makes the tool reusable and configurable
+   - No code edits needed to change input
+
+HOW IT WORKS NOW (main.py):
+---------------------------
+import sys
+
+if len(sys.argv) != 2:
+    print("Usage: python3 main.py <path_to_book>")
+    sys.exit(1)
+
+book_path = sys.argv[1]  # Gets the first argument after the script name
+
+USAGE:
+------
+python3 main.py <path_to_book>
+
+Example:
+python3 main.py books/frankenstein.txt
